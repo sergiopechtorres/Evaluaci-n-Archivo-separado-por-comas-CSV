@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación</title>
+</head>
+<style type="text/css">
+    .dropdownfiles {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+  
+    #drop_zone {
+      border: 2px dashed #bbb;
+      border-radius: 5px;
+      padding: 25px;
+      text-align: center;
+      color: #bbb;
+    }
+</style>
+  
+    <h1>Evaluación--Aplicación Web</h1>
+    <h2>Instrucciones :</h2>
+    <br>
+    <h3> Se pide desarrollar una aplicacion web en el cual el usuario podra subir un archivo separado por comas (CSV), el cual contiene una cabezera, es decir en la primera linea se tiene el nombre de los campos, apartir de la segunda linea hasta el final se tienen los datos. 
+        Supuestos:</h3>
+    <h5>1.El archivo que el usuario subira puede ser de dos formas teniendo un boton de abrir archivo o arrastrando el archivo a la pagina web. Las dos opciones deben ser funcionales para el usuario final. 
+        </h5>
+     <h5>2.La aplicacion debera informar si el archivo es valido o no lo es. Como por ejemplo que no sea un archivo tipo CSV, dejo a su consideracion el pensar que mas errores podra reportar al usuario final.
+       </h5>   
+       <h5>3.Visualizar el contenido del archivo en el nevegador si es que este cumple con los criterios de valides establecidos por el diseñador (en este caso el alumnos). Recordar usar etiquetas html5, CSS (tomar en cuenta los 3 niveles de CSS). Es decir cargar archivo y visualizarlo con un diseño y programacion web propuesto por usted.
+        </h5>
+        <h5>4.Toda vez que el archivo se puede navegar en el browser, permitir que el usuario selecciones minimo dos columnas, enviando el respectivo mensaje de que una columna se ha seleccionado, manejar dos tipos de mensajes uno para programador y otro para usuario final.
+            Realizar un reporte de la actividad, donde se informe lo pasos a seguir para usar su aplicacion, asi como todos los supuesto que usted considero para el desarrollo de la actividad.
+           </h5>
+           <h5>
+            5.Realizar un reporte de la actividad, donde se informe lo pasos a seguir para usar su aplicacion, asi como todos los supuesto que usted considero para el desarrollo de la actividad.
+           </h5>
+           <h5> 6.Todo las evidencias deberan estar alojadas en sus repositorios GIT.</h5>
+    <link rel="stylesheet" href="styles.css">
+
+    <script type="text/javascript" src="papaparse.min.js"></script>
+
+<body>
+    <div id="div1"></div>
+    <input type="file" id="uploadcsv" accept=".csv" class="col-md-offset-4 col-md-4" onchange="return validarExt()">
+    <button id="btn-upload-csv">Visualisar CSV</button>
+
+    <br>
+   
+<br>
+
+<br>
+
+    <div  id="drop_zone" accept=".csv" class="col-md-offset-4 col-md-4" onchange="return validarExt()" >Arrastra el archivo aquí</div>
+    <output id="list"></output>
+
+
+  <br>
+
+  
+  <body>
+  
+  
+
+	<table id="tbl-data">
+
+        <script type="text/javascript">
+            let btn_upload = document.getElementById('btn-upload-csv').addEventListener('click', ()=> {
+                Papa.parse(document.getElementById('uploadcsv').files[0], {
+                download: true,
+                header: false,
+				complete: function(results) {
+                let i = 0;
+                results.data.map((data,index)=>{
+
+                if (i === 0) {
+							let table = document.getElementById('tbl-data');
+							generateTableHead(table, data);
+				} else {
+							let table = document.getElementById('tbl-data');
+							generateTableRows(table, data);
+						}
+						i++;
+
+                });
+                }
+                });
+            });
+
+            function generateTableHead(table, data) {
+			let thead = table.createTHead();
+			let row = thead.insertRow();
+			for(let key of data) {
+				let th = document.createElement('th');
+				let text = document.createTextNode(key);
+				th.appendChild(text);
+				row.appendChild(th);
+			}
+		}
+        function generateTableRows(table, data) {
+			let newRow = table.insertRow(-1);
+			data.map((row, index)=> {
+				let newCell = newRow.insertCell();
+				let newText = document.createTextNode(row);
+				newCell.appendChild(newText);
+			});
+		
+		}
+        //Validación del Archivo CSV
+        
+function validarExt()
+{
+    var uploadcsv = document.getElementById('uploadcsv');
+    var archivoRuta = uploadcsv.value;
+    var extPermitidas = /(.csv)$/i;
+    if(!extPermitidas.exec(archivoRuta)){
+        alert('Asegurese de haber seleccionado un archivo CSV');
+        uploadcsv.value = '';
+        return false;
+    }
+
+    else
+    {
+        //PRevio del PDF
+        if (uploadcsv.files && uploadcsv.files[0]) 
+        {
+            var visor = new FileReader();
+            visor.onload = function(e) 
+            {
+                document.getElementById('visorArchivo').innerHTML = 
+                '<embed src="'+e.target.result+'" width="500" height="375" />';
+            };
+            visor.readAsDataURL(uploadcsv.files[0]);
+        }
+    }
+}
+
+
+//hhhhhhhhhhhhhhhhhhhhhhhhhh
+function handleFileSelect(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+  
+      var files = evt.dataTransfer.files; 
+      var output = [];
+      for (var i = 0, f; f = files[i]; i++) {
+        output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                    f.size, ' bytes, last modified: ',
+                    f.lastModifiedDate.toLocaleDateString(), '</li>');
+      }
+      document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+    }
+  
+    function handleDragOver(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+      evt.dataTransfer.dropEffect = 'copy'; 
+    }
+  
+    
+    var dropZone = document.getElementById('drop_zone');
+    dropZone.addEventListener('dragover', handleDragOver, false);
+    dropZone.addEventListener('drop', handleFileSelect, false);
+
+
+  </script>
+        
+		
+</table>
+
+
+    <table id="tbldata">
+
+        <script type="text/javascript">
+        
+        let btn_uploadd = document.getElementById('upload-csv').addEventListener('click', ()=> {
+			Papa.parse(document.getElementById('drop_zone').files[0], {
+				download: true,
+				header: false,
+				complete: function(results) {
+                    results.data.map((data,index)=>{
+                    console.log(data);
+                    });
+                    }
+                });
+                    
+                }); 
+        </script>
+    </table>
+
+
+</body>
+</html>
