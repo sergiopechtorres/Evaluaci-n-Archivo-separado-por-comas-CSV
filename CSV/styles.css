@@ -4,7 +4,30 @@
 	Color borde: 0F362D;
 	Color iluminado: 369681;
 */
+h2{
+	font-family: Georgia, 'Times New Roman', Times, serif;
+}
+h5{
+	font-family: 'Courier New', Courier, monospace;
+}
+#seccionformulario{
 
+    float: left;
+    padding: 2opx;
+    border: 1px solid #999999;
+}
+#secciondatos{
+    float: left;
+    width: 500px;
+    margin-left: 20px;
+    padding: 20px;
+    border: 1px solid #999999;
+}
+.directorio{
+    color: #0000FF;
+    font-weight: bold;
+    cursor: pointer;
+}
 
 #div1{
     background-color: white;
@@ -23,7 +46,6 @@ body{
 table{
 	background-color: white;
 	text-align: left;
-	border-collapse: collapse;
 	width: 100%;
 }
 
